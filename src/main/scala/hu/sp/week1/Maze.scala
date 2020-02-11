@@ -1,29 +1,7 @@
 package hu.sp.week1
 
 import hu.sp.week1.Tile.Tile
-
 import scala.util.Random
-
-object Tile extends Enumeration {
-  type Tile = Value
-  val WALL = Value("  ")
-  val PATH = Value(Console.WHITE_B + "  " + Console.RESET)
-}
-
-case class Coordinate(x: Int, y: Int) {
-
-  def getNeighbours = {
-    List(Coordinate(x - 1, y), Coordinate(x + 1, y), Coordinate(x, y - 1), Coordinate(x, y + 1))
-  }
-
-  def +(c: Coordinate) = {
-    Coordinate(x + c.x, y + c.y)
-  }
-
-  def *(i: Int) = {
-    Coordinate(x * i, y * i)
-  }
-}
 
 case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 
@@ -42,28 +20,30 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 
 object Maze {
 
-  def generateMaze1(width: Int, height: Int) = {
+  def generateMaze(width: Int, height: Int) = {
 
     var path = Set[Coordinate]()
     var border = Set[Coordinate](Coordinate(Random.nextInt(width / 2) * 2 + 1, Random.nextInt(height / 2) * 2 + 1))
 
-    def getFreeDoubleNeighbours(coordinate: Coordinate) = {
-      val neighbours = List(Coordinate(0, 1), Coordinate(0, -1), Coordinate(1, 0), Coordinate(-1, 0)).map(c => (coordinate + c, coordinate + (c * 2)))
-      val res = neighbours.filter(t => isValidCoordinate(t._1) && isValidCoordinate(t._2) && isFreeCoordinate(t._1) && isFreeCoordinate(t._2))
-      res
+    def getTwoNeighboursInAllDirections(coordinate: Coordinate) = {
+      List(Coordinate(0, 1), Coordinate(0, -1), Coordinate(1, 0), Coordinate(-1, 0)).map(c => (coordinate + c, coordinate + (c * 2)))
+    }
+
+    def filterAvailableNeighbours(t: (Coordinate, Coordinate)) = {
+      isValidCoordinate(t._1) && isValidCoordinate(t._2) && isAvailableCoordinate(t._1) && isAvailableCoordinate(t._2)
     }
 
     def isValidCoordinate(c: Coordinate) = {
       c.x >= 0 && c.x < width && c.y >= 0 && c.y < height
     }
 
-    def isFreeCoordinate(c: Coordinate) = {
+    def isAvailableCoordinate(c: Coordinate) = {
       !path.contains(c) && !border.contains(c)
     }
 
     def oneIteration = {
       val c = border.head
-      val next = getFreeDoubleNeighbours(c)
+      val next = getTwoNeighboursInAllDirections(c).filter(filterAvailableNeighbours(_))
       next.size match {
         case 0 => {
           border = border - c
@@ -92,7 +72,17 @@ object Maze {
 
 object MazeApp extends App {
 
-  val m = Maze.generateMaze1(77, 33)
+  println("Maze generator")
+  println("Enter width and height")
+  print("width=")
+  val width = io.StdIn.readInt()
+  print("height=")
+  val height = io.StdIn.readInt()
+  println(s"width=$width height=$height")
+
+  assert(width > 2 && width % 2 == 1 && height > 2 && height % 2 == 1, "Width and height have to be uneven number, greater than 2!")
+
+  val m = Maze.generateMaze(width, height)
   m.printMaze
 
 
