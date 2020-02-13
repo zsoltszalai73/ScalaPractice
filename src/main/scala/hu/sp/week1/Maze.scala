@@ -4,41 +4,46 @@ import hu.sp.week1.Tile.Tile
 
 case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 
-  def printMaze = {
+  def asString = {
+    val sb = new StringBuilder
     for (y <- 0 until height) {
       for (x <- 0 until width) {
         tileMap.get(Coordinate(x, y)) match {
-          case None => print("  ")
-          case Some(t) => print(t.toString)
+          case None => sb ++= "  "
+          case Some(t) => sb ++= t.toString
         }
       }
-      println
+      sb ++= "\n"
     }
+    sb.toString()
   }
 }
 
 object MazeApp extends App {
 
-  println("Maze generator")
-  println("Enter width and height")
-  print("width=")
-  val width = io.StdIn.readInt()
-  print("height=")
-  val height = io.StdIn.readInt()
-  println(s"width=$width height=$height")
+  val (width, height, count) = readParams
+  run(new MazeGeneratorOne, width, height, count)
+  run(new MazeGeneratorTwo, width, height, count)
 
-  assert(width > 2 && width % 2 == 1 && height > 2 && height % 2 == 1, "Width and height have to be uneven number, greater than 2!")
+  //  val m = new MazeGeneratorTwo
+  //  println(s"${m.generate(width, height).asString}")
 
-  //  val m = MazeGeneratorTwo(width, height).generate
-  //  m.printMaze
+  private def readParams = {
+    println("Maze generator")
+    println("Enter width and height")
+    print("width=")
+    val width = io.StdIn.readInt()
+    print("height=")
+    val height = io.StdIn.readInt()
+    print("count=")
+    val count = io.StdIn.readInt()
+    assert(width > 2 && width % 2 == 1 && height > 2 && height % 2 == 1 && count > 0, "Width and height have to be uneven number, greater than 2!")
+    (width, height, count)
+  }
 
-  println("MazeGeneratorOne")
-  run(new MazeGeneratorOne, width, height, 10)
-  println("MazeGeneratorTwo")
-  run(new MazeGeneratorTwo, width, height, 10)
+  private def run(mazeGen: MazeGenerator, width: Int, height: Int, count: Int) = {
 
-
-  def run(mazeGen: MazeGenerator, width: Int, height: Int, count: Int) = {
+    println(s"${mazeGen.getClass.getSimpleName}\n"+"="*mazeGen.getClass.getSimpleName.length)
     val times = for (_ <- 1 to count) yield {
       val t0 = System.nanoTime()
       mazeGen.generate(width, height)
@@ -47,7 +52,7 @@ object MazeApp extends App {
       println(s"Elapsed time: $diff Sec")
       diff
     }
-    println(s"Average time = ${times.sum / times.length}")
+    println(s"Average time = ${times.sum / times.length}\n")
   }
 
 }
