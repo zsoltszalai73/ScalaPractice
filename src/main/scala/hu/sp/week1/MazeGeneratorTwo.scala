@@ -2,7 +2,7 @@ package hu.sp.week1
 
 import scala.util.Random
 
-class MazeGeneratorTwo extends MazeGenerator {
+object MazeGeneratorTwo extends MazeGenerator {
 
   def generate(width: Int, height: Int) = {
 

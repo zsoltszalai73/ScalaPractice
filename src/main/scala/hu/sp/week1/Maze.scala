@@ -22,8 +22,8 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 object MazeApp extends App {
 
   val (width, height, count) = readParams
-  run(new MazeGeneratorOne, width, height, count)
-  run(new MazeGeneratorTwo, width, height, count)
+  run(MazeGeneratorOne, width, height, count)
+  run(MazeGeneratorTwo, width, height, count)
 
   //  val m = new MazeGeneratorTwo
   //  println(s"${m.generate(width, height).asString}")

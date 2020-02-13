@@ -2,7 +2,7 @@ package hu.sp.week1
 
 import scala.util.Random
 
-class MazeGeneratorOne extends MazeGenerator {
+object MazeGeneratorOne extends MazeGenerator {
 
   override def generate(width: Int, height: Int) = {
     var path = Set[Coordinate]()
