@@ -7,6 +7,7 @@ object MazeGeneratorOne extends MazeGenerator {
   override def generate(width: Int, height: Int) = {
     var path = Set[Coordinate]()
     var border = Set(Coordinate(Random.nextInt(width / 2) * 2 + 1, Random.nextInt(height / 2) * 2 + 1))
+    //var border = Set(Coordinate(1,1))
 
     def getTwoNeighboursInAllDirections(coordinate: Coordinate) = {
       List(Coordinate(0, 1), Coordinate(0, -1), Coordinate(1, 0), Coordinate(-1, 0)).map(c => (coordinate + c, coordinate + (c * 2)))
