@@ -21,12 +21,13 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 
 object MazeApp extends App {
 
-//  val (width, height, count) = readParams
-//  run(MazeGeneratorOne, width, height, count)
-//  run(MazeGeneratorTwo, width, height, count)
+  val (width, height, count) = readParams
+  run(MazeGeneratorOne, width, height, count)
+  run(MazeGeneratorTwo, width, height, count)
+  run(MazeGeneratorFour, width, height, count)
 
-    val m = MazeGeneratorFour
-    println(s"${m.generate(37, 17).asString}")
+//    val m = MazeGeneratorFour
+//    println(s"${m.generate(37, 17).asString}")
 
   private def readParams = {
     println("Maze generator")
