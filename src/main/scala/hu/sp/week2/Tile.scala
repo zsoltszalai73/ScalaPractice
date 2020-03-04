@@ -1,8 +1,8 @@
 package hu.sp.week2
 
-object Tile extends Enumeration {
-  type Tile = Value
-  val UNDEFINED = Value("??")
-  val WALL = Value("[]")
-  val PATH = Value(Console.WHITE_B + "  " + Console.RESET)
+import hu.sp.week2.TileType.TileType
+
+case class Tile(tileType: TileType) {
+
+  override def toString: String = tileType.toString
 }

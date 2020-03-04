@@ -7,16 +7,19 @@ import scala.util.Random
 case class FoldHelper(var nextKey: Int, var cMap: Map[Coordinate, Int], var pathList: ListBuffer[Coordinate])
 
 // using fold
-object MazeGeneratorFour extends MazeGenerator {
+object MazeGeneratorFive extends MazeGenerator {
 
-  def generate(width: Int, height: Int): Maze = {
+  def generate(width: Int, height: Int, numOfPaths: Int): Maze = {
     val tilesToDecide = Random.shuffle(for (x <- 1 until width - 1; y <- 1 until height - 1 if x % 2 + y % 2 == 1) yield Coordinate(x, y))
-    val (extraPath, remaining) = tilesToDecide.splitAt(7)
+    val (extraPath, remaining) = tilesToDecide.splitAt(numOfPaths - 1)
     val foldResult = remaining.foldLeft(FoldHelper(0, Map.empty, ListBuffer.empty))(processTiles)
     val pathList = foldResult.pathList.toList
     val allCoords = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
     val mazeMap = allCoords.map(c => categorize(c, pathList ++ extraPath)).toMap +
-      (Coordinate(1,0) -> Tile.PATH, Coordinate(width - 2, height - 1) -> Tile.PATH) // add enter and exit
+      (Coordinate(1,0) -> Tile(TileType.PATH), Coordinate(width - 2, height - 1) -> Tile(TileType.PATH)) // add enter and exit
+
+    //val mazeMapWithDiamonds
+
     Maze(mazeMap, width, height)
   }
 
@@ -60,9 +63,9 @@ object MazeGeneratorFour extends MazeGenerator {
 
   def categorize(c: Coordinate, pathList: List[Coordinate]) = {
     c match {
-      case c if pathList.contains(c) => c -> Tile.PATH            // decided as path
-      case c if (c.x % 2 == 1 && c.y % 2 == 1) => c -> Tile.PATH  // path for sure
-      case _ => c -> Tile.WALL                                    // the rest is wall
+      case c if pathList.contains(c) => c -> Tile(TileType.PATH)            // decided as path
+      case c if (c.x % 2 == 1 && c.y % 2 == 1) => c -> Tile(TileType.PATH)  // path for sure
+      case _ => c -> Tile(TileType.WALL)                                    // the rest is wall
     }
   }
 

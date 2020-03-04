@@ -1,7 +1,5 @@
 package hu.sp.week2
 
-import hu.sp.week2.Tile.Tile
-
 case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 
   def asString = {
@@ -21,13 +19,11 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int) {
 
 object MazeApp extends App {
 
-//  val (width, height, count) = readParams
-//  run(MazeGeneratorOne, width, height, count)
-//  run(MazeGeneratorTwo, width, height, count)
-//  run(MazeGeneratorFour, width, height, count)
+//  val (width, height, numOfPaths) = readParams
+//  run(MazeGeneratorFive, width, height, numOfPaths)
 
-    val m = MazeGeneratorFour
-    println(s"${m.generate(37, 17).asString}")
+    val m = MazeGeneratorFive
+    println(s"${m.generate(37, 17, 5).asString}")
 
   private def readParams = {
     println("Maze generator")
@@ -47,7 +43,7 @@ object MazeApp extends App {
     println(s"${mazeGen.getClass.getSimpleName}\n"+"="*mazeGen.getClass.getSimpleName.length)
     val times = for (_ <- 1 to count) yield {
       val t0 = System.nanoTime()
-      mazeGen.generate(width, height)
+      mazeGen.generate(width, height, 5)
       val t1 = System.nanoTime()
       val diff = (t1 - t0).toDouble / 1000000000
       println(s"Elapsed time: $diff Sec")
