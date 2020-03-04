@@ -17,12 +17,14 @@ object MazeGeneratorFive extends MazeGenerator {
     val allCoords = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
     val entry = Coordinate(1, 0)
     val exit = Coordinate(width - 2, height - 1)
-    val mazeMap = allCoords.map(c => categorize(c, pathList ++ extraPath)).toMap +
-      (entry -> Tile(TileType.PATH), exit -> Tile(TileType.PATH)) // add enter and exit
+    val mazeMap = allCoords.map(c => categorize(c, pathList ++ extraPath)).toMap
 
-    //val mazeMapWithDiamonds
+    val tilesWithDiamonds = Random.shuffle(mazeMap.filter(_._2.tileType == TileType.PATH)).take(numOfPaths).map(t => t._1 -> Tile(TileType.PATH_WITH_DIAMOND, t._2.distanceMap))
+    println(tilesWithDiamonds)
 
-    Maze(mazeMap, width, height, entry, exit)
+    val mapWithEntryExit = mazeMap ++ tilesWithDiamonds + (entry -> Tile(TileType.PATH), exit -> Tile(TileType.PATH)) // add enter and exit
+
+    Maze(mapWithEntryExit, width, height, entry, exit)
   }
 
   private def processTiles(m: FoldHelper, c: Coordinate) = {

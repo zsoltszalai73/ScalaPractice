@@ -42,7 +42,7 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int, entry: 
         tileMap(c).distanceMap.put(baseCoordinate, distance)
         getNotProcessedPathNeighbours(c)
       })
-      println(s"distance = $distance tilesToFill = $tilesToFill")
+//      println(s"distance = $distance tilesToFill = $tilesToFill")
     }
 
   }
