@@ -2,8 +2,16 @@ package hu.sp.week2
 
 import hu.sp.week2.TileType.TileType
 
-case class Tile(tileType: TileType, var distanceMap: Map[Coordinate, Int] = Map.empty) {
+import scala.collection.mutable
+
+case class Tile(tileType: TileType, distanceMap: mutable.Map[Coordinate, Int] = mutable.Map.empty) {
 
   override def toString: String = tileType.toString
 
+  def toStringWithDistance(withDistanceKey: Coordinate) = {
+    tileType match {
+      case TileType.PATH => Console.WHITE_B + "%02d".format(distanceMap.get(withDistanceKey).get) + Console.RESET
+      case _ => toString
+    }
+  }
 }

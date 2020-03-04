@@ -6,7 +6,13 @@ object MazeAppWithPaths extends App {
   //  run(MazeGeneratorFive, width, height, numOfPaths)
 
   val m = MazeGeneratorFive
-  println(s"${m.generate(37, 17, 5).asString}")
+
+  private val maze: Maze = m.generate(37, 17, 5)
+  maze.addDistanceMap(maze.entry)
+  println(s"${maze.asString}")
+
+
+
 
   private def readParams = {
     println("Maze generator")

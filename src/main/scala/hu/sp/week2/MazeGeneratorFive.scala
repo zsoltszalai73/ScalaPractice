@@ -15,12 +15,14 @@ object MazeGeneratorFive extends MazeGenerator {
     val foldResult = remaining.foldLeft(FoldHelper(0, Map.empty, ListBuffer.empty))(processTiles)
     val pathList = foldResult.pathList.toList
     val allCoords = for (x <- 0 until width; y <- 0 until height) yield Coordinate(x, y)
+    val entry = Coordinate(1, 0)
+    val exit = Coordinate(width - 2, height - 1)
     val mazeMap = allCoords.map(c => categorize(c, pathList ++ extraPath)).toMap +
-      (Coordinate(1,0) -> Tile(TileType.PATH), Coordinate(width - 2, height - 1) -> Tile(TileType.PATH)) // add enter and exit
+      (entry -> Tile(TileType.PATH), exit -> Tile(TileType.PATH)) // add enter and exit
 
     //val mazeMapWithDiamonds
 
-    Maze(mazeMap, width, height)
+    Maze(mazeMap, width, height, entry, exit)
   }
 
   private def processTiles(m: FoldHelper, c: Coordinate) = {
