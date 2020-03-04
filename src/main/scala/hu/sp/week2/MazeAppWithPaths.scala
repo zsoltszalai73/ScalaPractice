@@ -7,10 +7,10 @@ object MazeAppWithPaths extends App {
 
   val m = MazeGeneratorFive
 
-  private val maze: Maze = m.generate(37, 17, 5)
-  maze.addDistanceMap(maze.entry)
-  println(s"${maze.asString}")
-
+  private val maze: Maze = m.generate(77, 37, 5)
+  maze.addDistanceMap(maze.exit)
+  val l = maze.findPathByDMapKey(maze.entry, maze.exit)
+  println(s"${maze.asString(l)}")
 
 
 
