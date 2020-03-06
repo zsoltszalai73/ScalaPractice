@@ -2,9 +2,11 @@ package hu.sp.week2
 
 import scala.collection.mutable
 
-case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int, entry: Coordinate, exit: Coordinate) {
+case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int, entry: Coordinate, exit: Coordinate, diamonds: List[Coordinate]) {
 
-  def asString(path: List[Coordinate] = List[Coordinate]()) = {
+  case class Distance(start: Coordinate, end: Coordinate, distance: Int)
+
+  def asString(path: List[Coordinate] = List[Coordinate](), distanceKey: Coordinate = exit) = {
     val sb = new StringBuilder
     for (y <- 0 until height) {
       for (x <- 0 until width) {
@@ -17,7 +19,7 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int, entry: 
 
         tileMap.get(coordinate) match {
           case None => sb ++= "  "
-          case Some(t) => sb ++= t.toStringWithDistance(exit, color)
+          case Some(t) => sb ++= t.toStringWithDistance(distanceKey, color)
         }
       }
       sb ++= "\n"
@@ -76,6 +78,14 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int, entry: 
     }
     path.toList
   }
+
+  def findShortestPathWithAllDiamonds = {
+    val allPerm = diamonds.permutations.toList
+    val allPermAsDistance = allPerm.map(l => (entry :: l) :+ exit).map(_.sliding(2).map(l => Distance(l(0), l(1), tileMap(l(0)).distanceMap(l(1)))).toList)
+    val shortestPath = allPermAsDistance.minBy(l => l.foldLeft(0)(_ + _.distance))
+    shortestPath.flatMap(d => findPathByDMapKey(d.start, d.end))
+  }
+
 
 }
 

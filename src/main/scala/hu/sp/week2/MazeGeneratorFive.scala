@@ -24,7 +24,7 @@ object MazeGeneratorFive extends MazeGenerator {
 
     val mapWithEntryExit = mazeMap ++ tilesWithDiamonds + (entry -> Tile(TileType.PATH), exit -> Tile(TileType.PATH)) // add enter and exit
 
-    Maze(mapWithEntryExit, width, height, entry, exit)
+    Maze(mapWithEntryExit, width, height, entry, exit, tilesWithDiamonds.keySet.toList)
   }
 
   private def processTiles(m: FoldHelper, c: Coordinate) = {

@@ -8,10 +8,18 @@ object MazeAppWithPaths extends App {
   val m = MazeGeneratorFive
 
   private val maze: Maze = m.generate(77, 37, 5)
-  maze.addDistanceMap(maze.exit)
-  val l = maze.findPathByDMapKey(maze.entry, maze.exit)
-  println(s"${maze.asString(l)}")
 
+  (maze.exit :: maze.diamonds).foreach(maze.addDistanceMap(_))
+
+  val entryToExitPath = maze.findPathByDMapKey(maze.entry)
+  println(s"${maze.asString(entryToExitPath, maze.exit)}")
+
+//  val entryToDiamondPath = maze.findPathByDMapKey(maze.entry, maze.diamonds.head)
+//  println(s"${maze.asString(entryToDiamondPath, maze.diamonds.head)}")
+
+
+  val entryToExitWithDiamondsPath = maze.findShortestPathWithAllDiamonds
+  println(s"${maze.asString(entryToExitWithDiamondsPath)}")
 
 
   private def readParams = {
