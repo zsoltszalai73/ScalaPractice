@@ -11,7 +11,7 @@ object MazeAppWithPaths extends App {
 
   (maze.exit :: maze.diamonds).foreach(maze.addDistanceMap(_))
 
-  val entryToExitPath = maze.findPathByDMapKey(maze.entry)
+  val entryToExitPath = maze.findPathByDMapKey(maze.entry, maze.exit)
   println(s"${maze.asString(entryToExitPath, maze.exit)}")
 
 //  val entryToDiamondPath = maze.findPathByDMapKey(maze.entry, maze.diamonds.head)
