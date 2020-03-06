@@ -7,7 +7,7 @@ object MazeAppWithPaths extends App {
 
   val m = MazeGeneratorFive
 
-  private val maze: Maze = m.generate(77, 37, 5)
+  private val maze: Maze = m.generate(27, 17, 40, 9)
 
   (maze.exit :: maze.diamonds).foreach(maze.addDistanceMap(_))
 
@@ -40,7 +40,7 @@ object MazeAppWithPaths extends App {
     println(s"${mazeGen.getClass.getSimpleName}\n" + "=" * mazeGen.getClass.getSimpleName.length)
     val times = for (_ <- 1 to count) yield {
       val t0 = System.nanoTime()
-      mazeGen.generate(width, height, 5)
+      mazeGen.generate(width, height, 5, 5)
       val t1 = System.nanoTime()
       val diff = (t1 - t0).toDouble / 1000000000
       println(s"Elapsed time: $diff Sec")

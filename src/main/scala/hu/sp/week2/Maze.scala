@@ -82,7 +82,11 @@ case class Maze(tileMap: Map[Coordinate, Tile], width: Int, height: Int, entry: 
   def findShortestPathWithAllDiamonds = {
     val allPerm = diamonds.permutations.toList
     val allPermAsDistance = allPerm.map(l => (entry :: l) :+ exit).map(_.sliding(2).map(l => Distance(l(0), l(1), tileMap(l(0)).distanceMap(l(1)))).toList)
-    val shortestPath = allPermAsDistance.minBy(l => l.foldLeft(0)(_ + _.distance))
+    val shortestPath = allPermAsDistance.minBy(l => {
+      val pathLen = l.foldLeft(0)(_ + _.distance)
+//      println(s"pathLen=$pathLen")
+      pathLen
+    })
     shortestPath.flatMap(d => findPathByDMapKey(d.start, d.end))
   }
 

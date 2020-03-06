@@ -17,6 +17,7 @@ case class Tile(tileType: TileType, distanceMap: mutable.Map[Coordinate, Int] = 
   def toStringWithDistance(withDistanceKey: Coordinate, pathColor: String ) = {
     tileType match {
       case TileType.PATH => pathColor + "%02d".format(distanceMap.get(withDistanceKey).get).takeRight(2) + Console.RESET
+      case TileType.PATH_WITH_DIAMOND => pathColor + Console.BLACK + "<>" + Console.RESET
       case _ => toString
     }
   }

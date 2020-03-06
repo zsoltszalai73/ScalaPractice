@@ -9,7 +9,7 @@ case class FoldHelper(var nextKey: Int, var cMap: Map[Coordinate, Int], var path
 // using fold
 object MazeGeneratorFive extends MazeGenerator {
 
-  def generate(width: Int, height: Int, numOfPaths: Int): Maze = {
+  def generate(width: Int, height: Int, numOfPaths: Int, numOfDiamonds: Int): Maze = {
     val tilesToDecide = Random.shuffle(for (x <- 1 until width - 1; y <- 1 until height - 1 if x % 2 + y % 2 == 1) yield Coordinate(x, y))
     val (extraPath, remaining) = tilesToDecide.splitAt(numOfPaths - 1)
     val foldResult = remaining.foldLeft(FoldHelper(0, Map.empty, ListBuffer.empty))(processTiles)
@@ -18,12 +18,8 @@ object MazeGeneratorFive extends MazeGenerator {
     val entry = Coordinate(1, 0)
     val exit = Coordinate(width - 2, height - 1)
     val mazeMap = allCoords.map(c => categorize(c, pathList ++ extraPath)).toMap
-
-    val tilesWithDiamonds = Random.shuffle(mazeMap.filter(_._2.tileType == TileType.PATH)).take(numOfPaths).map(t => t._1 -> Tile(TileType.PATH_WITH_DIAMOND, t._2.distanceMap))
-    println(tilesWithDiamonds)
-
+    val tilesWithDiamonds = Random.shuffle(mazeMap.filter(_._2.tileType == TileType.PATH)).take(numOfDiamonds).map(t => t._1 -> Tile(TileType.PATH_WITH_DIAMOND, t._2.distanceMap))
     val mapWithEntryExit = mazeMap ++ tilesWithDiamonds + (entry -> Tile(TileType.PATH), exit -> Tile(TileType.PATH)) // add enter and exit
-
     Maze(mapWithEntryExit, width, height, entry, exit, tilesWithDiamonds.keySet.toList)
   }
 
