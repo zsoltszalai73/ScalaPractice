@@ -30,10 +30,10 @@ trait AnsiScreenPrinter {
   }
 
   def defaultPrinter(c: Coordinate) = {
-    Ansi.ansi().bg(Color.BLUE).fgBrightYellow().a("  ")
+    Ansi.ansi().bg(Color.BLUE).fg(Color.WHITE).a("<>")
   }
 
-  def ansiPrintFlat(cSet: Set[Coordinate], base: Coordinate, cPrinter: (Coordinate) => Ansi = defaultPrinter) = {
+  def getPrintShift(cSet: Set[Coordinate]) = {
     import scala.math.{max, min}
 
     val it = cSet.iterator
@@ -41,11 +41,14 @@ trait AnsiScreenPrinter {
     val (minX, maxX, minY, maxY) = it.foldLeft(starter.x, starter.x, starter.y, starter.y)(
       (t, c) => (min(t._1, c.x), max(t._2, c.x), min(t._3, c.y), max(t._4, c.y))
     )
+    (1 - minX, 1 - minY)
+  }
 
-    val (xShift, yShift) = (1 - minX, 1 - minY)
+  def ansiPrintFlat(cSet: Set[Coordinate], base: Coordinate, cPrinter: (Coordinate) => Ansi = defaultPrinter) = {
+    val (xShift, yShift) = getPrintShift(cSet)
     cSet.foreach(c => ansiPrintAt(cPrinter(c), 2*c.x + xShift, c.y + yShift))
-    ansiPrintAt(Ansi.ansi().bg(Color.BLUE).fgBrightYellow().a("**"), 2*base.x + xShift, base.y + yShift)
-    //ansiPrintAt(Ansi.ansi().a(s"minx=$minX maxx=$maxX"), 1, maxY+2)
+    //ansiPrintAt(Ansi.ansi().bg(Color.BLUE).fgBrightYellow().a("**"), 2*base.x + xShift, base.y + yShift)
+    (xShift, yShift)
   }
 
 }
